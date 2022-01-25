@@ -1,23 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import {React, useState, useEffect} from 'react'
+import { firebaseApp } from "./firebase";
+import AppStack from './appStack';
+import AuthStack from './authStack';
 
 function App() {
-  return (
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  const onAuthStateChanged = (user) =>{
+    setIsAuthenticated(!!user)
+  }
+
+  firebaseApp.auth().onAuthStateChanged(onAuthStateChanged)
+  return (            
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {isAuthenticated ?<AppStack/>:<AuthStack/>}
     </div>
   );
 }
